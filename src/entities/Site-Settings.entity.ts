@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 import { CommonEntity } from './Common.entity';
 
-@Entity('site_settings')
+@Entity()
 export class SiteSettings extends CommonEntity{
   @Column({ nullable: true })
   siteName: string;

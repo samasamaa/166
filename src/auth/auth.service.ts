@@ -14,7 +14,7 @@ export class AuthService{
     ){}
 
     async login(params: LoginUserDto){
-        let user = await this.userService.findOne({email: params.email}, ['id', 'password'])
+        let user = await this.userService.findOne({email: params.email}, ['id', 'password', 'role'])
         if(!user) throw new HttpException("Email or password is incorrect", HttpStatus.BAD_REQUEST);
     
     let checkPassword = await bcrypt.compare(params.password, user.password)

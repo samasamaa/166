@@ -2,13 +2,10 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne } f
 import { User } from './user.entity';
 import { CommonEntity } from './Common.entity';
 
-@Entity('orders')
+@Entity()
 export class Order extends CommonEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @ManyToOne(() => User, (user) => user.orders)
-  user: User;
+  /*@ManyToOne(() => User, (user) => user.orders)
+  user: User;*/
 
   @Column()
   link: string;

@@ -2,7 +2,7 @@ import { CanActivate, ExecutionContext, Injectable, UnauthorizedException, Forbi
 import { Reflector } from "@nestjs/core";
 import { JwtService } from "@nestjs/jwt";
 import { UserService } from "src/user/user.service";
-import { UserRoles } from "src/common/enum/user-roles";
+import { UserRole } from "../enum/user-roles.enum";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -29,9 +29,9 @@ export class AuthGuard implements CanActivate {
       let user = await this.userService.findOne({ id: payload.userId });
       if (!user) throw new UnauthorizedException('User not found');
 
-      let roles = this.reflector.get<UserRoles[]>('roles', context.getHandler());
-      if (roles && !user.roles.includes(user.roles.includes(UserRoles.ADMIN) || user.roles.includes(UserRoles.LEGAL_ENTITY))) {
-        let checkRoles = roles.find((role) => user.roles?.includes(role));
+      let roles = this.reflector.get('roles', context.getHandler());
+      if (roles && !user.role.includes(UserRole.ADMIN)) {
+        let checkRoles = roles.find((role) => user.role?.includes(role));
         if (!checkRoles) {
           throw new Error();
         }

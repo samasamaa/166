@@ -1,4 +1,4 @@
-import {
+/*import {
     Controller,
     Delete,
     FileTypeValidator,
@@ -21,7 +21,7 @@ import {
   import { UploadService } from './upload.service';
   import { FileInterceptor } from '@nestjs/platform-express';
   import { Request } from 'express';
-  import { Roles } from './roles.decorator';
+  import { Roles } from '../shared/decorators/roles.decorator';
   import { RolesGuard } from './roles.guard';
   import { UserRole } from '../enum/user-roles.enum';
   
@@ -71,4 +71,4 @@ import {
       return this.uploadService.deleteImage(id);
     }
   }
-  
+  */

@@ -1,6 +1,6 @@
 import { BeforeInsert, Column, Entity } from "typeorm";
 import { CommonEntity } from './Common.entity';
-import * as bcrypt from "bcrypt";
+import * as bcrypt from "bcrypt"
 import { Gender } from "../enum/gender.enum"
 import { Nationality } from '../enum/nationality.enum';
 import { PickupLocation } from '../enum/pickup-location.enum';

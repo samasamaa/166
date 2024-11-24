@@ -9,10 +9,7 @@ export class UserController {
     constructor(private readonly userService: UserService) {}
 
     @Get()
-    list(@Query('role') role?: UserRole) {
-        if (role) {
-            return this.userService.findByRole(role);
-        }
+    list() {
         return this.userService.find();
     }
 

@@ -1,17 +1,17 @@
 import { Entity, Column } from 'typeorm';
 import { CommonEntity } from './Common.entity';
 
-@Entity('tariffs')
+@Entity()
 export class Tariff extends CommonEntity {
     @Column()
     country: string;
 
-    @Column({ type: 'decimal', precision: 5, scale: 3 })
+    @Column({ type: 'decimal'})
     weightMin: number;
 
-    @Column({ type: 'decimal', precision: 5, scale: 3 })
+    @Column({ type: 'decimal'})
     weightMax: number;
 
-    @Column({ type: 'decimal', precision: 5, scale: 2 })
+    @Column({ type: 'decimal'})
     priceLocal: number; 
 }

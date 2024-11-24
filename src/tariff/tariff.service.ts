@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Tariff } from './tariff.entity';
+import { Tariff } from '../entities/Tariff.entity'
+import { CreateTariffDto } from './dto/create-tariff.dto';
 
 @Injectable()
 export class TariffService {
@@ -10,11 +11,22 @@ export class TariffService {
         private tariffRepository: Repository<Tariff>,
     ) {}
 
+    findAll(){
+        return this.tariffRepository.find();
+    }
+
+    create(createTariffDto: CreateTariffDto){
+        const tariff = this.tariffRepository.create(createTariffDto)
+        return this.tariffRepository.save(tariff);
+    }
+
+
+
     findTariffsByCountry(country: string): Promise<Tariff[]> {
         return this.tariffRepository.find({ where: { country } });
     }
 
-    findTariffByWeight(country: string, weight: number): Promise<Tariff> {
+    /*findTariffByWeight(country: string, weight: number): Promise<Tariff> {
         return this.tariffRepository.findOne({
             where: { 
                 country,
@@ -22,5 +34,5 @@ export class TariffService {
                 weightMax: { gte: weight }
             },
         });
-    }
+    }*/
 }

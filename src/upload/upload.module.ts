@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+/*import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -26,3 +26,4 @@ import { UploadService } from './upload.service';
   exports: [UploadService],
 })
 export class UploadModule {}
+*/
