@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { NewsModule } from './news/news.module';
 import { TariffModule } from './tariff/tariff.module';
+import { PickupLocationModule } from './pickup-location/pickup-location.module';
 
 
 @Module({
@@ -30,7 +31,8 @@ import { TariffModule } from './tariff/tariff.module';
     AuthModule,
     UserModule,
     NewsModule,
-    TariffModule
+    TariffModule,
+    PickupLocationModule
   ], 
 
   controllers: [AppController],

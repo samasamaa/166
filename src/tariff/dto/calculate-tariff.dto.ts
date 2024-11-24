@@ -1,25 +1,24 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
 import { IsNumber, IsString } from 'class-validator';
 
-export class CreateTariffDto {
+export class CalculateTariffDto {
     @ApiProperty()
     @IsString()
     country: string;
 
     @ApiProperty()
     @IsNumber()
-    weightMin: number;
+    width: number;
 
     @ApiProperty()
     @IsNumber()
-    weightMax: number;
+    height: number;
 
     @ApiProperty()
     @IsNumber()
-    priceLocal: number;
+    length: number;
 
-    @ApiProperty({ required: false })
+    @ApiProperty()
     @IsNumber()
-    priceManat?: number;
+    weight: number;
 }

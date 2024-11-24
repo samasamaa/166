@@ -6,12 +6,15 @@ export class Tariff extends CommonEntity {
     @Column()
     country: string;
 
-    @Column({ type: 'decimal'})
+    @Column()
     weightMin: number;
 
-    @Column({ type: 'decimal'})
+    @Column()
     weightMax: number;
 
-    @Column({ type: 'decimal'})
+    @Column()
     priceLocal: number; 
+
+    @Column()
+    priceManat: number;
 }

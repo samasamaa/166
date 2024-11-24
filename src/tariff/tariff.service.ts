@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Tariff } from '../entities/Tariff.entity'
+import { Tariff } from '../entities/tariff.entity';
 import { CreateTariffDto } from './dto/create-tariff.dto';
+import { CalculateTariffDto } from './dto/calculate-tariff.dto';
 
 @Injectable()
 export class TariffService {
@@ -11,28 +12,38 @@ export class TariffService {
         private tariffRepository: Repository<Tariff>,
     ) {}
 
-    findAll(){
+    async findAll() {
         return this.tariffRepository.find();
     }
 
-    create(createTariffDto: CreateTariffDto){
-        const tariff = this.tariffRepository.create(createTariffDto)
+    async create(createTariffDto: CreateTariffDto) {
+        const tariff = this.tariffRepository.create(createTariffDto);
         return this.tariffRepository.save(tariff);
     }
 
+    async update(id: number, updateTariffDto: CreateTariffDto) {
+        const tariff = await this.tariffRepository.findOneBy({ id });
+        if (!tariff) throw new NotFoundException(`Tariff with ID ${id} not found`);
 
-
-    findTariffsByCountry(country: string): Promise<Tariff[]> {
-        return this.tariffRepository.find({ where: { country } });
+        return this.tariffRepository.save({ ...tariff, ...updateTariffDto });
     }
 
-    /*findTariffByWeight(country: string, weight: number): Promise<Tariff> {
-        return this.tariffRepository.findOne({
-            where: { 
-                country,
-                weightMin: { lte: weight },
-                weightMax: { gte: weight }
-            },
-        });
-    }*/
+    async calculate(calculatetariffdto: CalculateTariffDto) {
+        const { country, width, height, length, weight } = calculatetariffdto;
+
+        const tariff = await this.tariffRepository.findOne({ where: {country} });
+        if (!tariff) throw new NotFoundException(`Tariff for country ${country} not found`);
+
+        const dimensionalWeight = (width * height * length) / 6000;
+        const applicableWeight = Math.max(dimensionalWeight, weight);
+
+        let price = 0;
+        if (applicableWeight < tariff.weightMin || applicableWeight > tariff.weightMax) {
+            throw new Error(`Weight out of tariff range for country ${country}`);
+        } else {
+            price = applicableWeight * (tariff.priceManat || tariff.priceLocal);
+        }
+
+        return { country, applicableWeight, price };
+    }
 }

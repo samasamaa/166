@@ -1,10 +1,10 @@
-import { BeforeInsert, Column, Entity } from "typeorm";
+import { BeforeInsert, Column, Entity, ManyToOne } from "typeorm";
 import { CommonEntity } from './Common.entity';
 import * as bcrypt from "bcrypt"
 import { Gender } from "../enum/gender.enum"
 import { Nationality } from '../enum/nationality.enum';
-import { PickupLocation } from '../enum/pickup-location.enum';
 import { UserRole } from "src/enum/user-roles.enum";
+import { PickupLocationEntity } from "./Pickup-Location.entity";
 
 export type UserKey = keyof User; 
 
@@ -58,12 +58,8 @@ export class User extends CommonEntity {
     })
     role: UserRole;    
 
-    @Column({
-        type: "enum",
-        enum: PickupLocation,
-        default: PickupLocation.Icherisheher_Sebail_Sheikh_Shamil_16
-    })
-    pickupLocation: PickupLocation;
+    @ManyToOne(() => PickupLocationEntity, (location) => location.users, { nullable: false })
+    pickupLocation: PickupLocationEntity;
 
     @BeforeInsert()
     async beforeInsert() {
