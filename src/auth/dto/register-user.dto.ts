@@ -1,12 +1,13 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsDate, IsEmail, IsEnum, IsString, Matches, MaxDate, MaxLength, MinLength } from "class-validator";
+import { IsDate, IsEmail, IsEnum, IsNumber, IsString, Matches, MaxDate, MaxLength, MinLength } from "class-validator";
 import * as dateFns from 'date-fns';
 import { LoginUserDto } from "./login-user.dto";
-import { Gender } from "../../enum/gender.enum"
-import { Nationality } from '../../enum/nationality.enum';
-import { PickupLocation } from '../../enum/pickup-location.enum';
-import { UserRole } from "src/enum/user-roles.enum";
+
+import { PickupLocationEntity } from "src/entities/Pickup-Location.entity";
+import { Gender } from "src/shared/enum/gender.enum";
+import { Nationality } from "src/shared/enum/nationality.enum";
+import { UserRole } from "src/shared/enum/user-role.enum";
 
 export class RegisterUserDto extends LoginUserDto {
     @Type()
@@ -76,7 +77,7 @@ export class RegisterUserDto extends LoginUserDto {
     role: UserRole;
 
     @Type()
-    @IsEnum(PickupLocation)
-    @ApiProperty({ enum: PickupLocation, default: PickupLocation.Icherisheher_Sebail_Sheikh_Shamil_16 })
-    pickupLocation: PickupLocation;
+    @IsNumber()
+    @ApiProperty()
+    pickupLocationId: number;
 }

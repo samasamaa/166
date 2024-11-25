@@ -1,8 +1,9 @@
 import { ConflictException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { User, UserKey } from "src/entities/User.entity";
-import { UserRole } from "src/enum/user-roles.enum";
-import { FindOptionsWhere, Repository } from "typeorm";
+import { User } from "src/entities/User.entity";
+import { UserRole } from "src/shared/enum/user-role.enum";
+
+import { FindOptionsSelect, FindOptionsWhere, Repository } from "typeorm";
 
 @Injectable()
 export class UserService{
@@ -15,7 +16,7 @@ export class UserService{
         return this.userRepo.find({where})
     }
 
-    findOne(where: FindOptionsWhere<User>, select?: UserKey[]){
+    findOne(where: FindOptionsWhere<User>, select?: FindOptionsSelect<User>){
         return this.userRepo.findOne({where, select})
     }
 

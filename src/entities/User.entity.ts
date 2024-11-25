@@ -1,12 +1,12 @@
-import { BeforeInsert, Column, Entity, ManyToOne } from "typeorm";
+import { BeforeInsert, Column, Entity, ManyToOne, OneToMany } from "typeorm";
 import { CommonEntity } from './Common.entity';
 import * as bcrypt from "bcrypt"
-import { Gender } from "../enum/gender.enum"
-import { Nationality } from '../enum/nationality.enum';
-import { UserRole } from "src/enum/user-roles.enum";
 import { PickupLocationEntity } from "./Pickup-Location.entity";
+import { Cargo } from "./Cargo.entity";
+import { Gender } from "src/shared/enum/gender.enum";
+import { UserRole } from "src/shared/enum/user-role.enum";
+import { Nationality } from "src/shared/enum/nationality.enum";
 
-export type UserKey = keyof User; 
 
 @Entity()
 export class User extends CommonEntity {
@@ -58,11 +58,14 @@ export class User extends CommonEntity {
     })
     role: UserRole;    
 
-    @ManyToOne(() => PickupLocationEntity, (location) => location.users, { nullable: false })
+    @ManyToOne(() => PickupLocationEntity, (location) => location.users)
     pickupLocation: PickupLocationEntity;
 
     @BeforeInsert()
     async beforeInsert() {
         this.password = await bcrypt.hash(this.password, 10);
     }
+
+    @OneToMany(() => Cargo, (cargo) => cargo.user)
+    cargos: Cargo[];
 }

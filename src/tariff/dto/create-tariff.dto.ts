@@ -1,25 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
-import { IsNumber, IsString } from 'class-validator';
+import { IsString, IsArray, IsOptional } from 'class-validator';
 
 export class CreateTariffDto {
-    @ApiProperty()
+    @ApiProperty({ example: 'Turkey', description: 'Country associated with the tariff' })
     @IsString()
     country: string;
 
-    @ApiProperty()
-    @IsNumber()
-    weightMin: number;
-
-    @ApiProperty()
-    @IsNumber()
-    weightMax: number;
-
-    @ApiProperty()
-    @IsNumber()
-    priceLocal: number;
-
-    @ApiProperty({ required: false })
-    @IsNumber()
-    priceManat?: number;
+    @ApiProperty({
+        example: [1, 2],
+        description: 'IDs of the tariff ranges associated with this tariff',
+        required: false,
+    })
+    @IsOptional()
+    @IsArray()
+    rangeIds?: number[]; 
 }

@@ -4,7 +4,8 @@ import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { LoginUserDto } from "./dto/login-user.dto";
 import * as bcrypt from "bcrypt"
 import { JwtService } from "@nestjs/jwt";
-import { UserRole } from "src/enum/user-roles.enum";
+import { UserRole } from "src/shared/enum/user-role.enum";
+
 
 @Injectable()
 export class AuthService{
@@ -14,7 +15,7 @@ export class AuthService{
     ){}
 
     async login(params: LoginUserDto){
-        let user = await this.userService.findOne({email: params.email}, ['id', 'password', 'role'])
+        let user = await this.userService.findOne({email: params.email})
         if(!user) throw new HttpException("Email or password is incorrect", HttpStatus.BAD_REQUEST);
     
     let checkPassword = await bcrypt.compare(params.password, user.password)

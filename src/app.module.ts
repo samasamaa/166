@@ -9,6 +9,10 @@ import { UserModule } from './user/user.module';
 import { NewsModule } from './news/news.module';
 import { TariffModule } from './tariff/tariff.module';
 import { PickupLocationModule } from './pickup-location/pickup-location.module';
+import { SitesettingsModule } from './sitesettings/sitesettings.module';
+import { CargoModule } from './cargo/cargo.module';
+import { ClsModule } from 'nestjs-cls';
+import { UploadModule } from './upload/upload.module';
 
 
 @Module({
@@ -28,11 +32,18 @@ import { PickupLocationModule } from './pickup-location/pickup-location.module';
       logging: true,
 
     }),
+    ClsModule.forRoot({
+      global: true,
+      middleware: { mount: true }, 
+    }),
     AuthModule,
     UserModule,
     NewsModule,
     TariffModule,
-    PickupLocationModule
+    PickupLocationModule,
+    SitesettingsModule,
+    CargoModule,
+    UploadModule
   ], 
 
   controllers: [AppController],

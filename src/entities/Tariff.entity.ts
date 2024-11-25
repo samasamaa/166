@@ -1,20 +1,12 @@
-import { Entity, Column } from 'typeorm';
+import { Entity, Column, OneToMany } from 'typeorm';
 import { CommonEntity } from './Common.entity';
+import { TariffRange } from './TariffRange.entity';
 
 @Entity()
 export class Tariff extends CommonEntity {
     @Column()
     country: string;
 
-    @Column()
-    weightMin: number;
-
-    @Column()
-    weightMax: number;
-
-    @Column()
-    priceLocal: number; 
-
-    @Column()
-    priceManat: number;
+    @OneToMany(() => TariffRange, (range) => range.tariff, { cascade: true })
+    ranges: TariffRange[];
 }

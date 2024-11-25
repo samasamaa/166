@@ -1,29 +1,12 @@
-/*import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { MulterModule } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { extname, join } from 'path';
-
-import { ImageEntity } from 'src/database/entities/Image.entity';
+import { Module } from '@nestjs/common';
 import { UploadController } from './upload.controller';
 import { UploadService } from './upload.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ImageEntity } from 'src/entities/ImageEntity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([ImageEntity]),
-    MulterModule.register({
-      storage: diskStorage({
-        destination: join(__dirname, '../../../uploads'), 
-        filename: (req, file, callback) => {
-          const uniqueName = `${Date.now()}${extname(file.originalname).toLowerCase()}`;
-          callback(null, uniqueName);
-        },
-      }),
-    }),
-  ],
+  imports: [TypeOrmModule.forFeature([ImageEntity])],
   controllers: [UploadController],
   providers: [UploadService],
-  exports: [UploadService],
 })
 export class UploadModule {}
-*/

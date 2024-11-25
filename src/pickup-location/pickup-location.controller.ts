@@ -3,8 +3,9 @@ import { PickupLocationService } from './pickup-location.service';
 import { CreatePickupLocationDto } from './dto/create-pickup-location.dto';
 import { UpdatePickupLocationDto } from './dto/update-pickup-location.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
-import { UserRole } from 'src/enum/user-roles.enum';
+
 import { Roles } from 'src/shared/decorators/roles.decorator';
+import { UserRole } from 'src/shared/enum/user-role.enum';
 
 
 @Controller('pickup-locations')

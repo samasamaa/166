@@ -1,7 +1,7 @@
 import { Controller, Get, Param, Query } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { ApiTags } from "@nestjs/swagger";
-import { UserRole } from "src/enum/user-roles.enum";
+
 
 @Controller('users')
 @ApiTags('User')

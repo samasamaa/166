@@ -1,22 +1,24 @@
-import { Body, Controller, Get, Post } from "@nestjs/common";
-import { ApiTags } from "@nestjs/swagger";
-import { TariffService } from "./tariff.service";
-import { CreateTariffDto } from "./dto/create-tariff.dto";
+import { Controller, Post, Body, Get } from '@nestjs/common';
+import { TariffService } from './tariff.service';
+import { CreateTariffDto } from './dto/create-tariff.dto';
+import { CreateTariffRangeDto } from './dto/create-tariff-range.dto';
 
-@Controller('tariff')
-@ApiTags('Tariff')
-export class TariffController{
-    constructor(
-        private tariffService : TariffService
-    ){}
+@Controller('tariffs')
+export class TariffController {
+    constructor(private readonly tariffService: TariffService) {}
 
     @Get()
-    findAll(){
-        return this.tariffService.findAll();
+    async getAll() {
+        return this.tariffService.getAll();
+    } 
+    
+    @Post()
+    async createTariff(@Body() createTariffDto: CreateTariffDto) {
+        return this.tariffService.createTariff(createTariffDto);
     }
 
-    @Post()
-    create(@Body() createtariffdto: CreateTariffDto ){
-        return this.tariffService.create(createtariffdto);
+    @Post('range')
+    async createTariffRange(@Body() createTariffRangeDto: CreateTariffRangeDto) {
+        return this.tariffService.createTariffRange(createTariffRangeDto);
     }
 }
