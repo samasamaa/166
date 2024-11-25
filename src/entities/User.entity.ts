@@ -7,10 +7,11 @@ import { Gender } from "src/shared/enum/gender.enum";
 import { UserRole } from "src/shared/enum/user-role.enum";
 import { Nationality } from "src/shared/enum/nationality.enum";
 
+export type UserKey = keyof User; 
 
 @Entity()
 export class User extends CommonEntity {
-    @Column({ unique: true })
+    @Column()
     email: string;
 
     @Column({ select: false })

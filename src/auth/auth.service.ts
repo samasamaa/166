@@ -15,7 +15,7 @@ export class AuthService{
     ){}
 
     async login(params: LoginUserDto){
-        let user = await this.userService.findOne({email: params.email})
+        let user = await this.userService.findOne({email: params.email}, ['id', 'password', 'role'])
         if(!user) throw new HttpException("Email or password is incorrect", HttpStatus.BAD_REQUEST);
     
     let checkPassword = await bcrypt.compare(params.password, user.password)
@@ -35,8 +35,6 @@ export class AuthService{
         if (existingUser) {
             throw new HttpException("User with this email already exists", HttpStatus.BAD_REQUEST);
         }
-
-        params.password = await bcrypt.hash(params.password, 10);
 
         if (!params.role) {
             params.role = UserRole.USER;

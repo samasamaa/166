@@ -6,10 +6,10 @@ import { AuthGuard } from 'src/guards/auth.guard';
 
 import { Roles } from 'src/shared/decorators/roles.decorator';
 import { UserRole } from 'src/shared/enum/user-role.enum';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 
 @Controller('pickup-locations')
-@UseGuards(AuthGuard) 
 export class PickupLocationController {
   constructor(private readonly pickupLocationService: PickupLocationService) {}
 
@@ -19,12 +19,16 @@ export class PickupLocationController {
   }
 
   @Post()
+  @UseGuards(AuthGuard) 
+  @ApiBearerAuth()
   @Roles(UserRole.ADMIN) 
   create(@Body() createPickupLocationDto: CreatePickupLocationDto) {
     return this.pickupLocationService.create(createPickupLocationDto);
   }
 
   @Patch(':id')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard) 
   @Roles(UserRole.ADMIN) 
   update(
     @Param('id') id: number,

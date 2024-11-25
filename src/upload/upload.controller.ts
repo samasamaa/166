@@ -32,7 +32,7 @@ export class UploadController {
   constructor(private uploadService: UploadService) {}
 
   @Post()
-  @Roles(UserRole.ADMIN) // Sadece admin kullanıcılar için
+  @Roles(UserRole.ADMIN) 
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -65,7 +65,7 @@ export class UploadController {
   }
 
   @Delete(':id')
-  @Roles(UserRole.ADMIN) // Sadece admin kullanıcılar için
+  @Roles(UserRole.ADMIN) 
   deleteImage(@Param('id') id: number) {
     return this.uploadService.deleteImage(id);
   }
