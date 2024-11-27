@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsOptional } from 'class-validator';
+import { IsString, IsOptional, IsArray, IsNumber } from 'class-validator';
 
 export class CreateNewsDto {
   @ApiProperty({ example: 'Breaking News', description: 'The title of the news' })
@@ -10,8 +10,9 @@ export class CreateNewsDto {
   @IsString()
   description: string;
 
-  @ApiProperty({ example: 'https://example.com/image.jpg', description: 'The image URL for the news', required: false })
   @IsOptional()
-  @IsString()
-  imageUrl?: string;
+  @IsArray()
+  @IsNumber({}, { each: true })
+  @ApiProperty({ description: 'Array of image IDs', example: [1, 2, 3] })
+  imageIds?: number[];
 }

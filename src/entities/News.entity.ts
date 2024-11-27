@@ -1,5 +1,6 @@
-import { Entity, Column, CreateDateColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, CreateDateColumn, ManyToOne, OneToMany } from 'typeorm';
 import { CommonEntity } from './Common.entity';
+import { ImageEntity } from './ImageEntity';
 
 @Entity()
 export class News extends CommonEntity {
@@ -9,6 +10,6 @@ export class News extends CommonEntity {
   @Column({ nullable: true })
   description: string;
 
-  @Column({ nullable: true })
-  imageUrl: string; 
+  @OneToMany(() => ImageEntity, (image) => image.news, { cascade: true })
+  images: ImageEntity[];
 }

@@ -1,41 +1,47 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Request } from 'express';
-import { rmSync } from 'fs';
+import { Repository } from 'typeorm';
+
+import * as fs from 'fs';
 import { join } from 'path';
 import { ImageEntity } from 'src/entities/ImageEntity';
-import { Repository } from 'typeorm';
 
 @Injectable()
 export class UploadService {
   constructor(
     @InjectRepository(ImageEntity)
-    private imageRepo: Repository<ImageEntity>,
+    private readonly imageRepo: Repository<ImageEntity>,
   ) {}
 
-  async uploadImage(req: Request, file: Express.Multer.File) {
-    const port = req.socket.localPort;
+  async uploadImage(file: Express.Multer.File): Promise<ImageEntity> {
+    if (!file) {
+      throw new NotFoundException('No file uploaded');
+    }
+
+    const imageUrl = `/uploads/${file.filename}`;
     const image = this.imageRepo.create({
       filename: file.filename,
-      url: `${req.protocol}://${req.hostname}${port ? `:${port}` : ''}/uploads/${file.filename}`,
+      url: imageUrl,
     });
 
-    await this.imageRepo.save(image);
-    return image;
+    return await this.imageRepo.save(image);
   }
 
-  async deleteImage(id: number) {
+  async deleteImage(id: number): Promise<void> {
     const image = await this.imageRepo.findOne({ where: { id } });
-    if (!image) throw new NotFoundException('Image not found');
+    if (!image) {
+      throw new NotFoundException('Image not found');
+    }
 
-  
-    rmSync(join(__dirname, '../../uploads', image.filename), { force: true });
+    const filePath = join(__dirname, '..', '..', 'uploads', image.filename);
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+    }
 
-    // Veritabanından sil
-    return this.imageRepo.remove(image);
+    await this.imageRepo.remove(image);
   }
 
-  async deleteImages(images: ImageEntity[]) {
-    return await this.imageRepo.remove(images);
+  async listImages(): Promise<ImageEntity[]> {
+    return await this.imageRepo.find();
   }
 }

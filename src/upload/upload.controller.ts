@@ -1,42 +1,40 @@
 import {
   Controller,
-  Delete,
-  FileTypeValidator,
-  MaxFileSizeValidator,
-  Param,
-  ParseFilePipe,
   Post,
-  Req,
-  UploadedFile,
-  UseGuards,
   UseInterceptors,
+  UploadedFile,
+  Delete,
+  Param,
+  Get,
 } from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiBody,
-  ApiConsumes,
-  ApiTags,
-} from '@nestjs/swagger';
-import { UploadService } from './upload.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Request } from 'express';
-import { AuthGuard } from 'src/guards/auth.guard';
-import { Roles } from 'src/shared/decorators/roles.decorator';
-import { UserRole } from 'src/shared/enum/user-role.enum';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
+import { ApiTags, ApiConsumes, ApiBody } from '@nestjs/swagger';
+import { UploadService } from './upload.service';
 
-@Controller('upload')
 @ApiTags('Upload')
-@UseGuards(AuthGuard)
-@ApiBearerAuth()
+@Controller('upload')
 export class UploadController {
-  constructor(private uploadService: UploadService) {}
+  constructor(private readonly uploadService: UploadService) {}
 
   @Post()
-  @Roles(UserRole.ADMIN) 
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (req, file, callback) => {
+          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const ext = extname(file.originalname);
+          const filename = `${file.fieldname}-${uniqueSuffix}${ext}`;
+          callback(null, filename);
+        },
+      }),
+    }),
+  )
   @ApiConsumes('multipart/form-data')
   @ApiBody({
-    required: true,
+    description: 'Upload an image',
     schema: {
       type: 'object',
       properties: {
@@ -47,26 +45,18 @@ export class UploadController {
       },
     },
   })
-  uploadImage(
-    @Req() req: Request,
-    @UploadedFile(
-      new ParseFilePipe({
-        validators: [
-          new MaxFileSizeValidator({ maxSize: 10485760 }), 
-          new FileTypeValidator({
-            fileType: /image\/(jpg|jpeg|png)$/i, 
-          }),
-        ],
-      }),
-    )
-    file: Express.Multer.File,
-  ) {
-    return this.uploadService.uploadImage(req, file);
+  async uploadFile(@UploadedFile() file: Express.Multer.File) {
+    return await this.uploadService.uploadImage(file);
   }
 
   @Delete(':id')
-  @Roles(UserRole.ADMIN) 
-  deleteImage(@Param('id') id: number) {
-    return this.uploadService.deleteImage(id);
+  async deleteFile(@Param('id') id: number) {
+    await this.uploadService.deleteImage(id);
+    return { message: 'Image deleted successfully' };
+  }
+
+  @Get()
+  async listFiles() {
+    return await this.uploadService.listImages();
   }
 }

@@ -13,6 +13,8 @@ import { SitesettingsModule } from './sitesettings/sitesettings.module';
 import { CargoModule } from './cargo/cargo.module';
 import { ClsModule } from 'nestjs-cls';
 import { UploadModule } from './upload/upload.module';
+import { join } from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 
 @Module({
@@ -30,11 +32,14 @@ import { UploadModule } from './upload/upload.module';
       migrationsRun: true,
       synchronize: true,
       logging: true,
-
+      autoLoadEntities: true
     }),
     ClsModule.forRoot({
       global: true,
       middleware: { mount: true }, 
+    }),ServeStaticModule.forRoot({
+      serveRoot: '/uploads',
+      rootPath: join(__dirname, '../uploads'),
     }),
     AuthModule,
     UserModule,
